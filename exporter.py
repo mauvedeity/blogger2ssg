@@ -47,7 +47,8 @@ def processEntry(entry):
     fname = epubid.split('-')[-1]
   else:
     eyear, emonth, fname = splitup(epath)
-    fname = "./" + eyear + "/" + emonth + "/" + fname
+    
+  fname = "./" + eyear + "/" + emonth + "/" + fname
 
   requiredir(eyear, emonth)
 
