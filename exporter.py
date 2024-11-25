@@ -24,7 +24,7 @@ def splitup(pspath):
   return(lpath[-3], lpath[-2], lpath[-1])
 
 def requiredir(pf1, pf2):
-  newdir = './' + pf1 + '/' + pf2
+  newdir = './output/' + pf1 + '/' + pf2
   os.makedirs(newdir,exist_ok=True)
 
 def processEntry(entry):
@@ -48,7 +48,7 @@ def processEntry(entry):
   else:
     eyear, emonth, fname = splitup(epath)
     
-  fname = "./" + eyear + "/" + emonth + "/" + fname
+  fname = "./output/" + eyear + "/" + emonth + "/" + fname
 
   requiredir(eyear, emonth)
 
@@ -64,7 +64,7 @@ def processEntry(entry):
   os.utime(fname,(tm.timestamp(),tm.timestamp()))
 
 def main():
-  tree = ET.parse('blog-dump.xml')
+  tree = ET.parse('./input/blog-dump.xml')
   root = tree.getroot()
   entries = root.findall('{http://www.w3.org/2005/Atom}entry')
 
