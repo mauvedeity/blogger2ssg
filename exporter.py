@@ -74,7 +74,7 @@ def main():
     if 'post-' in e_id:
       processEntry(e)
       ekount += 1
-      if(ekount > 1000):
+      if(ekount > 1):
         exit()
 
 if __name__ == '__main__':
