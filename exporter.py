@@ -4,42 +4,54 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 import os
 import time
-#
+##
 #
 def getPostID(pstr):
   return(pstr.split('-')[2])
 
-def titleUnmung(pstr):
-  sl = str(pstr).splitlines()
-  if(len(sl)== 1):
-    return(sl[0])
-  else:
-    rv = ''
-    for i in sl:
-      rv += i.strip() + ' '
-    return(rv.strip())
-
 def splitup(pspath):
   lpath = pspath.split('/')
   return(lpath[-3], lpath[-2], lpath[-1])
-
-def requiredir(pf1, pf2):
-  newdir = './output/' + pf1 + '/' + pf2
+  
+def requiredir(lpf):
+  newdir = '/'.join(lpf)
+  newdir = './output/'+newdir+'/'
+  newdir = os.path.normpath(newdir)
   os.makedirs(newdir,exist_ok=True)
 
-def processEntry(entry):
-  epubid = entry.find('{http://www.w3.org/2005/Atom}id').text
-  econtent = entry.find('{http://www.w3.org/2005/Atom}content').text
-  epubdate = entry.find('{http://www.w3.org/2005/Atom}published').text
+def getValue(pentry, pname):
+  pnam2 = '{http://www.w3.org/2005/Atom}'+pname
+  return(pentry.find(pnam2).text)
 
+def getPathTitle(pentry):
   epath = None
   etitle = None
-
-  links = entry.findall('{http://www.w3.org/2005/Atom}link')
+  links = pentry.findall('{http://www.w3.org/2005/Atom}link')
   for l in links:
     if(l.attrib['rel'] == 'alternate'):
       epath = l.attrib['href']
       etitle = l.attrib['title']
+  return(epath, etitle)  
+
+def fixcontent(pcontent):
+  """
+  fix up the content:
+  * translate from html to markdown
+  * for internal links, point to markdown files and strip the absolute prefix off the front
+    so the site works properly
+  """
+  return(pcontent)
+
+#
+# POSTS
+#
+def processPost(entry):
+  epubid = getValue(entry, 'id')
+  econtent = getValue(entry, 'content')
+  epubdate = getValue(entry,'published')
+  epath = None
+  etitle = None
+  epath, etitle = getPathTitle(entry)
 
   if(epath is None):
     eyear = '0000'
@@ -49,20 +61,40 @@ def processEntry(entry):
     eyear, emonth, fname = splitup(epath)
     
   fname = "./output/" + eyear + "/" + emonth + "/" + fname
-
-  requiredir(eyear, emonth)
+  requiredir([eyear, emonth])
 
   if (etitle == None): # one post doesn't have a title
     etitle = epubid
-  print(etitle, getPostID(epubid),sep='|')
   with open(fname, 'wt') as outf:
     outf.write('<h1>' + etitle + '</h1>\n')
     outf.write('\n')
-    outf.write(econtent)
+    outf.write(fixcontent(econtent))
     outf.write('\n')
   tm = datetime.strptime(epubdate,'%Y-%m-%dT%H:%M:%S.%f%z')
   os.utime(fname,(tm.timestamp(),tm.timestamp()))
 
+#
+# PAGES
+#
+def processPage(entry):
+  epubid = getValue(entry, 'id')
+  econtent = getValue(entry, 'content')
+  epubdate = getValue(entry,'published')
+  epath = None
+  etitle = None
+  epath, etitle = getPathTitle(entry)
+  requiredir(['p'])
+  fname = './output/p/'+epubid.split('-')[-1]
+  with open(fname, 'wt') as outf:
+    outf.write('<h1>' + etitle + '</h1>\n\n')
+    outf.write(fixcontent(econtent))
+    outf.write('\n')
+  tm = datetime.strptime(epubdate,'%Y-%m-%dT%H:%M:%S.%f%z')
+  os.utime(fname,(tm.timestamp(),tm.timestamp()))
+
+#
+# MAIN
+#
 def main():
   tree = ET.parse('./input/blog-dump.xml')
   root = tree.getroot()
@@ -70,12 +102,17 @@ def main():
 
   ekount = 0
   for e in entries:
-    e_id = e.find('{http://www.w3.org/2005/Atom}id').text
+    e_id = getValue(e, 'id')
     if 'post-' in e_id:
-      processEntry(e)
+      processPost(e)
       ekount += 1
-      if(ekount > 1):
-        exit()
+    if 'page-' in e_id:
+      processPage(e)
+      ekount += 1
+    if(ekount > 1):
+      break
+  
+  print(ekount,'entries processed')
 
 if __name__ == '__main__':
   main()
