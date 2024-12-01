@@ -35,10 +35,10 @@ def getPathTitle(pentry):
 
 def fixcontent(pcontent):
   """
-  fix up the content:
-  * translate from html to markdown
-  * for internal links, point to markdown files and strip the absolute prefix off the front
-    so the site works properly
+  cmd = 'pandoc -f html -t markdown -o target.md source.html'
+  lcmd = cmd.split('')
+  lcmd[6] = target
+  lcmd[7] = source
   """
   return(pcontent)
 
