@@ -45,5 +45,6 @@ def getAllImages(sURL):
         parser = myHTMLParser()
         parser.feed(indexdata)
 
-glHeader = 'http://localhost:8091/'
-getAllImages('index.html')
+if __name__ == '__main__':
+    glHeader = 'http://localhost:8091/'
+    getAllImages('index.html')
