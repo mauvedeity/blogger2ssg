@@ -1,0 +1,119 @@
+<h1>It was all going so well...</h1>
+
+I'm still interested in HTML games, and
+    especially the possibilities offered by the "Choose Your Own
+    Adventure" type of books. I have had a couple of goes at them:
+    <a
+    href="https://s3.eu-west-2.amazonaws.com/mauvedeity/Escape-from-Tenopia.html"
+    target="_blank">Escape from Tenopia</a> and <a
+    href="https://s3.eu-west-2.amazonaws.com/mauvedeity/secret-pyramids.html"
+    target="_blank">Secret of the Pyramids</a>. Both of
+    those would seem to be amongst the Internet's better-kept
+    secrets. I'd basically built them using various Twine
+    compilers. For Secret of the Pyramids, I used <a
+    href="https://www.motoslave.net/tweego/"
+    target="_blank">tweego</a>, which worked pretty well -
+    you can <a
+    href="https://uselessofblog.blogspot.com/2020/02/making-adventure-game-part-1.html">follow
+    along with what I did here</a>.<div><br
+    /></div><div>However, a casual conversation at
+    <a href="https://www.facebook.com/RevivalRetroEvents/"
+    target="_blank">Revival Retro Part 1</a> made me have
+    another think. I was talking about the games on my way in, and
+    the person I was talking to asked if I was targeting the <a
+    href="https://en.wikipedia.org/wiki/ZX_Spectrum"
+    target="_blank">ZX Spectrum</a>. Well, I
+    <i>wasn't</i>, but as you'll know if you've been
+    reading this blog for a while, you'll know I'm an absolute
+    sucker for a hopelessly impractical
+    endeavour.</div><div><br
+    /></div><div>And so I decided to have at it.
+    After all, it's just text, I can write a bunch of PRINT
+    statements, and an INPUT or two, and that'll about do it. I
+    decided to use the <a
+    href="https://www.boriel.com/pages/the-zx-basic-compiler.html"
+    target="_blank">Boriel ZX BASIC Compiler</a> to do the
+    heavy work of actually building some kind of input file. That
+    compiler lets you write a dialect of BASIC, which is basically
+    mostly ZX BASIC with a fair few extensions added, and outputs a
+    <a href="https://worldofspectrum.org/TZXformat.html"
+    target="_blank">TZX</a> file (basically a file that
+    emulators understand as if it was a cassette tape being
+    played).</div><div><br
+    /></div><div>And I was off! <table
+    align="center" cellpadding="0" cellspacing="0"
+    class="tr-caption-container" style="margin-left: auto;
+    margin-right: auto;"><tbody><tr><td
+    style="text-align: center;"><a
+    href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjGKTRouR3pquQNrfB-hq_iucp-sAkO0lgah0qTt2mIwYj51hMZa3UFCBk_0netfAvHbKDCFScALZu0Ks6gtU7f4hkSwN1k5igrj_rt86JximzVSVHwxtvKd4VftQaxIT1vKpWlmbA06W4/s1392/opening-screen.png"
+    imageanchor="1" style="margin-left: auto; margin-right:
+    auto;"><img border="0" data-original-height="1094"
+    data-original-width="1392"
+    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjGKTRouR3pquQNrfB-hq_iucp-sAkO0lgah0qTt2mIwYj51hMZa3UFCBk_0netfAvHbKDCFScALZu0Ks6gtU7f4hkSwN1k5igrj_rt86JximzVSVHwxtvKd4VftQaxIT1vKpWlmbA06W4/s320/opening-screen.png"
+    width="320"
+    /></a></td></tr><tr><td
+    class="tr-caption" style="text-align: center;">Opening game
+    screen featuring title and first choice
+    point</td></tr></tbody></table>&nbsp;Yup,
+    that's my code, written in BASIC, compiled and running on a ZX
+    Spectrum emulator called Fuse (Go <a
+    href="https://worldofspectrum.org/tools/emulators"
+    target="_blank">here</a> and search for "Fuse"). The
+    reason most of the font looks really weird is because I'm using
+    the 64-column library included with the compiler, just to get
+    more text on screen. There would otherwise be a <i>whole
+    lot </i>of paging going on.</div><div><br
+    /></div><div>I was happily tonking through the
+    file, converting one chunk at a time, when it all went properly
+    sideways. First, I had all kinds of really weird behaviour,
+    like garbage text continually overflowing the screen. I tried
+    fiddling with the compiler switches, and the type of machine
+    that Fuse was emulating, and managed to get a bit further.
+    Eventually, I got it to the point where it just wouldn't work
+    at all:</div><div><br /></div><div
+    class="separator" style="clear: both; text-align:
+    center;"><a
+    href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMePJTTMtbWrK5veswCi0i5GMeCG0Swcz2XKrUFWkN-Hn0s9e50_3ibj34JHrfb1vkypc0VcSq7aURgGDvrD09Cq6DMA3uPPg0-SbSNrOj84pZI5C7PsJ1zwYJnyPI-KVTWEssw392HuA/s2784/4-out-of-memory.png"
+    imageanchor="1" style="margin-left: 1em; margin-right:
+    1em;"><img border="0" data-original-height="1978"
+    data-original-width="2784"
+    src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhMePJTTMtbWrK5veswCi0i5GMeCG0Swcz2XKrUFWkN-Hn0s9e50_3ibj34JHrfb1vkypc0VcSq7aURgGDvrD09Cq6DMA3uPPg0-SbSNrOj84pZI5C7PsJ1zwYJnyPI-KVTWEssw392HuA/s320/4-out-of-memory.png"
+    width="320" /></a></div><div>So that's
+    error "4 Out of memory, 30:1". The reference to "30:1" is to do
+    with the Boriel compiler creating a small BASIC program that
+    just loads the compiled code and hands execution to it. Or, in
+    this case, not.</div><div><br
+    /></div><div>But just how had I summoned <a
+    href="http://www.bbc.co.uk/comedy/blackadder/epguide/two_head.shtml"
+    target="_blank">Captain and Mrs. Cockup</a> on this
+    occasion? I won't lie, "Out of memory" is a pretty big hint.
+    I'd basically forgotten just how limited these old machines
+    were. I was thinking "Yeah, yeah, 48K", but I was building this
+    on my MBP, which has slightly more memory than that. So, my
+    basic approach of a bunch of PRINT statements wasn't going to
+    work.</div><div><br
+    /></div><div>Just for giggles, I thought I'd
+    have a look at how far out I am. Well, the <a
+    href="https://github.com/mauvedeity/secret-pyramids/blob/master/src/secrets-pyramids.tw"
+    target="_blank">original Twee3 source file for the
+    game</a>&nbsp;is, err, 78K. So even if I just typed
+    the text in, it wouldn't fit in a 48K Spectrum. Yes, I know
+    there's a 128K Spectrum, but the Boriel compiler doesn't target
+    it yet. There's also a <a href="https://www.specnext.com"
+    target="_blank">ZX Spectrum Next</a>, but I don't own
+    one of those.</div><div><br
+    /></div><div>And so I'm going to have to think
+    again. My original idea was to somehow encode the data and
+    write a player for the data, so I guess it's back to that idea.
+    I know that the 128K model gives you extra memory by
+    bank-switching, but of course you can only bank-switch data,
+    not program code. The current plan of attack, therefore, is to
+    build some kind of script that can take the Twee3 source, and
+    output a player and compressed data that I can then feed
+    through the Boriel compiler to get a tape image
+    file.</div><div><br
+    /></div><div>I'll keep blogging here so you know
+    how well it's going. Do leave a comment if you've got a better
+    idea!</div><div><br
+    /></div><div><br
+    /></div><div><br /></div>

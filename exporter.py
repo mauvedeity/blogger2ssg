@@ -100,7 +100,8 @@ def main():
   root = tree.getroot()
   entries = root.findall('{http://www.w3.org/2005/Atom}entry')
 
-  ekount = 0
+  ekount = 1
+  EKMAX = 20  # Don't dump all 700 entries
   for e in entries:
     e_id = getValue(e, 'id')
     if 'post-' in e_id:
@@ -109,7 +110,7 @@ def main():
     if 'page-' in e_id:
       processPage(e)
       ekount += 1
-    if(ekount > 1):
+    if(ekount >= EKMAX):
       break
   
   print(ekount,'entries processed')
