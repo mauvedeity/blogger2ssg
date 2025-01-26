@@ -40,11 +40,11 @@ def getAllImages(sURL):
     sURL = glHeader + sURL
     with urllib.request.urlopen(sURL) as response:
         data = response.read()
-        print(data)
         indexdata = data.decode("utf-8")
+        print(indexdata)
         parser = myHTMLParser()
         parser.feed(indexdata)
 
 if __name__ == '__main__':
     glHeader = 'http://localhost:8091/'
-    getAllImages('index.html')
+    getAllImages('parse.html')

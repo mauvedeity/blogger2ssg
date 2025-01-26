@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 1288), see www.w3.org">
+
+  <title></title>
+</head>
+
+<body>
+  <h1>It was all going so well...</h1><!--
+    It's pointing at the same file twice - once full size (s1392) and once 320x across (s320) 
+    We don't need to download it twice, we can just download the full size one and replace the inline `img` link with one that
+    specifies the size we want (width="320")
+    This will download more than we want, because the UA will download the full size image and then squish,
+    but it's that or having to require something like imagemagick to create thumbnails as we don't have an API
+    to resquish images.
+    NB: HTML5 *requires* alt text - let's just wang the file name in there for now? Or leave it blank so automated 
+    tools warn?
+    Don't need `imageanchor`
+  -->
+
+  <table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto;">
+    <tbody>
+      <tr>
+        <td style="text-align: center;">
+          <a href="./images/opening-screen.png" style="margin-left: auto; margin-right: auto;">
+            <img border="0" src="./images/opening-screen.png" width="320">
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td class="tr-caption" style="text-align: center;">Opening game screen featuring title and first choice point</td> <!-- duplicate as alt text -->
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="separator" style="clear: both; text-align: center;"> <!-- ensures we're on a new line -->
+    <a href="./images/4-out-of-memory.png" imageanchor="1" style="margin-left: 1em; margin-right: 1em;">
+      <img border="0" src="./images/4-out-of-memory.png" width="320" />
+    </a>
+  </div> <!-- no caption so do not emit alt text, this ensures that accessibility tools will alert on missing alt text -->
+
+</body>
+</html>
