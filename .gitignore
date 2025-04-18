@@ -2,6 +2,9 @@
 
 input/
 output/
+**/*.html
+**/*.url
+**/*.png
 
 # Mac-specific
 
