@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 import os
 import time
+import subprocess
 ##
 #
 def getPostID(pstr):
@@ -33,15 +34,21 @@ def getPathTitle(pentry):
       etitle = l.attrib['title']
   return(epath, etitle)  
 
-def fixcontent(pcontent):
-  """
-  cmd = 'pandoc -f html -t markdown -o target.md source.html'
-  lcmd = cmd.split('')
-  lcmd[6] = target
-  lcmd[7] = source
-  """
-  return(pcontent)
-
+def fixcontent(pcontent: str, ptitle: str, pdate):
+  result = subprocess.run(['pandoc', '-f', 'html', '-t', 'markdown'], input=pcontent, capture_output=True, text=True)
+  process2 = '+++\n'
+  process2 += f"title = '{ptitle}'\n"
+  process2 += f"date = '{pdate}'\n"
+  process2 += "draft = 'true'\n"
+  process2 += '+++\n\n'
+  process2 += result.stdout
+  # additional processing
+  process2 = process2.replace('{target="_new"}','')
+  process2 = process2.replace('{target="_blank"}','')
+  process2 = process2.replace('\\"','"')
+  process2 = process2.replace("\\'", "'")
+  process2 = process2.replace('https://uselessofblog.blogspot.com/p/proudly-serving.html','/pages/proudly-serving/')
+  return(process2)
 #
 # POSTS
 #
@@ -60,15 +67,13 @@ def processPost(entry):
   else:
     eyear, emonth, fname = splitup(epath)
     
-  fname = "./output/" + eyear + "/" + emonth + "/" + fname
+  fname = "./output/" + eyear + "/" + emonth + "/" + fname + ".md"
   requiredir([eyear, emonth])
 
   if (etitle == None): # one post doesn't have a title
     etitle = epubid
   with open(fname, 'wt') as outf:
-    outf.write('<h1>' + etitle + '</h1>\n')
-    outf.write('\n')
-    outf.write(fixcontent(econtent))
+    outf.write(fixcontent(econtent, etitle, epubdate))
     outf.write('\n')
   tm = datetime.strptime(epubdate,'%Y-%m-%dT%H:%M:%S.%f%z')
   os.utime(fname,(tm.timestamp(),tm.timestamp()))
