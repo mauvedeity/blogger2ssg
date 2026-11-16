@@ -37,11 +37,12 @@ def getPathTitle(pentry):
 def fixcontent(pcontent: str, ptitle: str, pdate):
   result = subprocess.run(['pandoc', '-f', 'html', '-t', 'markdown'], input=pcontent, capture_output=True, text=True)
   process2 = '+++\n'
-  process2 += f"title = '{ptitle}'\n"
+  process2 += f'title = "{ptitle}"\n'
   process2 += f"date = '{pdate}'\n"
   process2 += "draft = 'true'\n"
   process2 += '+++\n\n'
   process2 += result.stdout
+  process2 += '\n'
   # additional processing
   process2 = process2.replace('{target="_new"}','')
   process2 = process2.replace('{target="_blank"}','')
