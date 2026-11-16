@@ -47,6 +47,7 @@ def fixcontent(pcontent: str, ptitle: str, pdate):
   process2 = process2.replace('{target="_blank"}','')
   process2 = process2.replace('\\"','"')
   process2 = process2.replace("\\'", "'")
+  process2 = process2.replace("\\", "")
   process2 = process2.replace('https://uselessofblog.blogspot.com/p/proudly-serving.html','/pages/proudly-serving/')
   return(process2)
 #
@@ -66,15 +67,16 @@ def processPost(entry):
     fname = epubid.split('-')[-1]
   else:
     eyear, emonth, fname = splitup(epath)
-    
-  fname = "./output/" + eyear + "/" + emonth + "/" + fname + ".md"
-  requiredir([eyear, emonth])
 
+  # fname = "./output/" + eyear + "/" + emonth + "/" + fname + ".md"
+  # requiredir('./output/')
+  requiredir("./output")
+  fname = fname.replace('.html', '.md')
+  fname = f"./output/{fname}"
   if (etitle == None): # one post doesn't have a title
     etitle = epubid
   with open(fname, 'wt') as outf:
     outf.write(fixcontent(econtent, etitle, epubdate))
-    outf.write('\n')
   tm = datetime.strptime(epubdate,'%Y-%m-%dT%H:%M:%S.%f%z')
   os.utime(fname,(tm.timestamp(),tm.timestamp()))
 
@@ -91,9 +93,7 @@ def processPage(entry):
   requiredir(['p'])
   fname = './output/p/'+epubid.split('-')[-1]
   with open(fname, 'wt') as outf:
-    outf.write('<h1>' + etitle + '</h1>\n\n')
-    outf.write(fixcontent(econtent))
-    outf.write('\n')
+    outf.write(fixcontent(econtent, etitle, epubdate))
   tm = datetime.strptime(epubdate,'%Y-%m-%dT%H:%M:%S.%f%z')
   os.utime(fname,(tm.timestamp(),tm.timestamp()))
 
@@ -106,7 +106,7 @@ def main():
   entries = root.findall('{http://www.w3.org/2005/Atom}entry')
 
   ekount = 1
-  EKMAX = 20  # Don't dump all 700 entries
+  EKMAX = 2500  # Don't dump all 700 entries
   for e in entries:
     e_id = getValue(e, 'id')
     if 'post-' in e_id:
